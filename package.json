@@ -1,22 +1,23 @@
 {
-  "name": "@pooriaarab/agentic-scaffold",
+  "name": "agentic-domain",
   "version": "0.1.0",
-  "description": "Canonical scaffold for a CLI plus library plus MCP server pack.",
+  "description": "Check a domain name and buy it through Cloudflare Registrar.",
   "keywords": [
+    "domain",
+    "cloudflare",
+    "registrar",
     "cli",
     "mcp",
-    "scaffold",
-    "starter",
-    "typescript"
+    "agentic"
   ],
   "license": "MIT",
   "author": "Pooria Arab",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pooriaarab/agentic-scaffold.git"
+    "url": "https://github.com/pooriaarab/agentic-domain.git"
   },
   "type": "module",
-  "private": true,
+  "private": false,
   "engines": {
     "node": ">=18"
   },
@@ -26,7 +27,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "mcpName": "io.github.pooriaarab/agentic-scaffold",
+  "mcpName": "io.github.pooriaarab/agentic-domain",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -36,8 +37,8 @@
     }
   },
   "bin": {
-    "agentic-pack": "./dist/cli.js",
-    "agentic-pack-mcp": "./dist/mcp-bin.js"
+    "agentic-domain": "./dist/cli.js",
+    "agentic-domain-mcp": "./dist/mcp-bin.js"
   },
   "scripts": {
     "build": "tsup",
