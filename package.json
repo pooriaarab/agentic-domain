@@ -1,7 +1,7 @@
 {
   "name": "agentic-domain",
   "version": "0.1.1",
-  "description": "Check a domain and buy it only with --live through Cloudflare Registrar.",
+  "description": "Preview domain names or attempt availability checks and purchases through Cloudflare Registrar with a Node.js library, CLI, and MCP server.",
   "keywords": [
     "cloudflare",
     "cloudflare-registrar",
@@ -9,9 +9,12 @@
     "domain-check",
     "domain-purchase",
     "registrar",
+    "domain-registration",
+    "dry-run",
+    "nodejs",
+    "typescript",
     "cli",
-    "mcp",
-    "agent"
+    "mcp"
   ],
   "license": "MIT",
   "author": "Pooria Arab",
