@@ -1,8 +1,6 @@
 # agentic-domain
 
-Check one domain name. Buy it only when you pass `--live`.
-
-Cloudflare Registrar is the vendor. Dry run is the default.
+agentic-domain checks a domain and buys it only with `--live` through **Cloudflare Registrar**. Cloudflare Registrar is the real vendor. The default command is a dry run. It exits successfully and does not use the network.
 
 ## Install
 
@@ -10,9 +8,15 @@ Cloudflare Registrar is the vendor. Dry run is the default.
 npm install -g agentic-domain
 ```
 
-## Quick start
+## Vendors
 
-This is a dry run. It does not call Cloudflare or buy anything.
+| Brand | Environment key | Live command |
+| --- | --- | --- |
+| Cloudflare Registrar | `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID` | `agentic-domain example.com --live` |
+
+## CLI
+
+Preview a domain safely. This command does not check availability. It does not buy a domain.
 
 ```sh
 agentic-domain example.com
@@ -22,27 +26,23 @@ agentic-domain example.com
 {"domain":"example.com","status":"unknown","available":false,"vendor":"cloudflare","dryRun":true}
 ```
 
-## CLI
-
-Check and buy only after you have reviewed the dry run.
+Check availability and buy only when the domain is available.
 
 ```sh
-export CLOUDFLARE_API_TOKEN=...
-export CLOUDFLARE_ACCOUNT_ID=...
-agentic-domain example.com --live
+CLOUDFLARE_API_TOKEN=... CLOUDFLARE_ACCOUNT_ID=... \
+  agentic-domain example.com --live
 ```
 
-Vendor errors are returned unchanged. A missing credential is a clear error.
+Live mode calls the Cloudflare API. An unavailable domain is not purchased.
 
 ## Library
 
 ```ts
 import { runDomain } from "agentic-domain";
 
-const result = await runDomain("example.com");
+const preview = await runDomain("example.com");
+const receipt = await runDomain("example.com", { live: true });
 ```
-
-Pass `{ live: true }` to check and buy through Cloudflare Registrar.
 
 ## MCP
 
@@ -51,4 +51,4 @@ agentic-domain-mcp
 ```
 
 Call `check_domain` with `{ "domain": "example.com" }` for a dry run. Pass
-`"live": true` to check and buy.
+`"live": true` to check Cloudflare and buy an available domain.
