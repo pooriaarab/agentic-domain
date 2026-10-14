@@ -1,61 +1,75 @@
 # agentic-domain
 
-Safely check and buy a domain through **Cloudflare Registrar**. It ships as a TypeScript library, CLI, and MCP server.
+[![npm version](https://img.shields.io/npm/v/agentic-domain)](https://www.npmjs.com/package/agentic-domain)
+[![npm downloads](https://img.shields.io/npm/dm/agentic-domain)](https://www.npmjs.com/package/agentic-domain)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](https://opensource.org/license/mit)
 
-> **Safety:** all commands and MCP calls are dry runs by default. Nothing reaches Cloudflare or purchases a domain until `--live` (or MCP `live: true`) is explicitly supplied. Live mode checks first and buys only when the domain is available.
+agentic-domain is an open-source domain registration wrapper for Node.js developers and agents, with local previews and a Cloudflare Registrar adapter.
 
 ## Install
 
-```bash
+```sh
 npm install agentic-domain
 ```
 
-## CLI
+Requires Node.js 18 or later. Includes TypeScript declarations and three runtime dependencies.
 
-```bash
-# safe preview; no network access
+## Preview your first domain
+
+```sh
 npx agentic-domain example.com
-
-# checks then buys an available domain
-CLOUDFLARE_API_TOKEN=... CLOUDFLARE_ACCOUNT_ID=... \
-  npx agentic-domain example.com --live
 ```
 
-The JSON result includes `dryRun`, `status`, availability, and (for a successful purchase) `orderId`. The API token needs the Cloudflare permissions required for Registrar operations.
+Success prints JSON with `domain: "example.com"`, `dryRun: true`, and `status: "unknown"`.
+This preview validates and normalizes the name. It makes no network request and needs no credentials.
 
-## Library
+## Features and coverage
 
-```ts
-import { runDomain, checkDomain, buyDomain } from "agentic-domain";
+- **Domain validation:** Trim and lowercase names before checking their syntax.
+- **Dry-run preview:** Return an unknown status without querying availability.
+- **Registrar adapter:** Send check and purchase requests to Cloudflare.
+- **Purchase flow:** Attempt purchase when the check returns `available: true`.
 
-const preview = await runDomain("example.com"); // no request
-const receipt = await runDomain("example.com", { live: true }); // check, then buy if available
+| Integration | Status | Verification |
+| --- | --- | --- |
+| Cloudflare Registrar | Implemented adapter; live behavior unverified | Mocked check and purchase requests only |
 
-// Low-level methods are live-only; use them only when intentionally making a request.
-const check = await checkDomain("example.com");
-const purchase = await buyDomain("example.com");
+One vendor adapter exists. Tests do not establish real domain availability or successful registration.
+
+## Library and agent tools
+
+```js
+import { runDomain } from "agentic-domain";
+
+const preview = await runDomain("Example.COM");
+console.log(preview.domain, preview.status); // example.com unknown
 ```
 
-Provide `apiToken` and `accountId` in the options to avoid environment variables. A custom `fetchFn` is supported for testing.
+The CLI accepts a domain plus `--live`, `--help`/`-h`, or `--version`/`-V`.
+Run `npx --package agentic-domain agentic-domain-mcp` for the Model Context Protocol (MCP) stdio server.
+Its single tool is `check_domain`. The `live` field defaults to `false`.
 
-## MCP
+Export `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` before live requests.
+The package does not load `.env` files; load them in your shell or application.
 
-```json
-{
-  "mcpServers": {
-    "agentic-domain": { "command": "npx", "args": ["-y", "agentic-domain", "mcp"] }
-  }
-}
+```sh
+npx agentic-domain your-chosen-domain.com --live
 ```
 
-The `check_domain` tool accepts `{ "domain": "example.com", "live": false }`. Omit `live` for the safe preview. Setting `live` to true checks Cloudflare and purchases only if available.
+Live mode checks the name and attempts purchase when available; it can spend money.
+A returned `purchased: true` reflects the adapter's successful HTTP response handling.
+Confirm registration with Cloudflare; the adapter does not verify ownership afterward.
 
-## Development
+## Limits and status
 
-```bash
-npm test
-npm run typecheck
-npm run build
-```
+`checkDomain` can make network requests when a token exists, even without a live flag.
+`buyDomain` directly attempts purchase. Use `runDomain` for the dry-run default.
+No price cap, purchase confirmation, retry policy, or explicit request timeout exists.
+The adapter does not inspect Cloudflare's JSON `success` flag.
+Missing availability data becomes `unavailable`; a successful purchase HTTP response becomes `purchased: true`.
+The Worker entry is empty scaffolding. No managed registrar service is included.
+Version 0.1.1 has an API that may change.
 
-Tests use injected fetch fixtures and never call the network.
+## Links and license
+
+[Package and releases](https://www.npmjs.com/package/agentic-domain) · [MIT license](https://opensource.org/license/mit)
