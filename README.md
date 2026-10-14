@@ -1,108 +1,54 @@
-# Agentic scaffold
+# agentic-domain
 
-Canonical scaffold for a CLI plus library plus MCP server pack.
+Check one domain name. Buy it only when you pass `--live`.
 
-Clone this repo to start a new pack. It gives one core with three
-faces: a terminal command, an npm import, and an MCP server.
+Cloudflare Registrar is the vendor. Dry run is the default.
 
-## What you get
+## Install
 
-- One core: brand config, logs, guards, routing, dry run, cost reports.
-- Three faces over that core: CLI, library, MCP server.
-- A frozen core contract, so packs share one API.
-- A worker entry and a wrangler sample for edge deploys.
-- Build, typecheck, and tests that pass from a fresh clone.
+```sh
+npm install -g agentic-domain
+```
 
 ## Quick start
 
-```sh
-git clone https://github.com/pooriaarab/agentic-scaffold.git my-pack
-cd my-pack
-npm install
-npm run build
-npm run typecheck
-npm test
-```
-
-Run the command:
+This is a dry run. It does not call Cloudflare or buy anything.
 
 ```sh
-node dist/cli.js summary --text "hello world hello"
+agentic-domain example.com
 ```
 
-Call the library:
-
-```js
-import { summarizeText } from "./dist/index.js";
-
-console.log(summarizeText("hello world hello"));
+```json
+{"domain":"example.com","status":"unknown","available":false,"vendor":"cloudflare","dryRun":true}
 ```
 
-Start the MCP server:
+## CLI
+
+Check and buy only after you have reviewed the dry run.
 
 ```sh
-node dist/cli.js mcp
+export CLOUDFLARE_API_TOKEN=...
+export CLOUDFLARE_ACCOUNT_ID=...
+agentic-domain example.com --live
 ```
 
-## Three usecases
+Vendor errors are returned unchanged. A missing credential is a clear error.
 
-1. You run one text summary from the terminal.
-2. You import the summary function in a script.
-3. You let an agent call the same function as an MCP tool.
+## Library
 
-## Clone checklist
+```ts
+import { runDomain } from "agentic-domain";
 
-This repo is a template. Replace each slot in each file that holds it.
+const result = await runDomain("example.com");
+```
 
-- `__PACK_NAME__`: the directory name, like `my-pack`.
-- `__NPM_NAME__`: the npm name, like `agentic-<block>` (bare name, never @pooriaarab/ scoped unless the brief says scoped).
-- `__PACK_COMMAND__`: the terminal command, like `my-pack`.
-- `__PACK_DESCRIPTION__`: one plain sentence, under 100 chars.
-- `__PACK_KEYWORDS__`: plain keywords, like `notes, search, cli`.
-- `__GITHUB_USER__`: the repo owner, like `pooriaarab`.
+Pass `{ live: true }` to check and buy through Cloudflare Registrar.
 
-Slot files: `AGENTS.md`, `SKILL.md`, `RULES.md`, `llms.txt`,
-`server.json`, `.mcp.json`, `wrangler.jsonc`.
-
-Then rename the scaffold identity itself:
-
-- `package.json`: name, bin commands, mcpName. Remove `"private": true`.
-- `src/index.ts`: the `DEFAULT_BRAND` fields.
-- This file: the pitch and the examples above.
-
-At publish time, set `server.json` version to the npm version and
-`server.json` repository id from `gh api repos/OWNER/REPO --jq .id`.
-
-## Gates
-
-Run all three before you push a pack:
+## MCP
 
 ```sh
-npm run build && npm run typecheck && npm test
+agentic-domain-mcp
 ```
 
-Then run the real installed CLI once from a tarball:
-
-```sh
-npm pack
-npx --yes --package ./pooriaarab-agentic-scaffold-0.1.0.tgz agentic-pack summary --text "hello"
-```
-
-## Release flow
-
-Push to `main` for review. Merge to `release` to publish. The
-publish workflow ships only when the version is new.
-
-## Layout
-
-- `src/index.ts`: the library face.
-- `src/cli.ts`: the terminal face.
-- `src/mcp.ts`: the MCP server. `src/mcp-bin.ts` starts it.
-- `src/worker.ts`: the edge worker face.
-- `src/core.ts`: the shared core.
-- `agentic-core.d.ts`: the frozen contract.
-- `docs/agentic-core.md`: the contract in plain words.
-
-## License
-
-MIT. See `LICENSE`.
+Call `check_domain` with `{ "domain": "example.com" }` for a dry run. Pass
+`"live": true` to check and buy.
