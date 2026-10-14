@@ -1,21 +1,62 @@
 {
   "name": "agentic-domain",
-  "version": "0.1.0",
-  "description": "Check a domain name and buy it through Cloudflare Registrar.",
-  "keywords": ["domain", "cloudflare", "registrar", "cli", "mcp", "agentic"],
+  "version": "0.1.1",
+  "description": "Check a domain and buy it only with --live through Cloudflare Registrar.",
+  "keywords": [
+    "cloudflare",
+    "cloudflare-registrar",
+    "domain",
+    "domain-check",
+    "domain-purchase",
+    "registrar",
+    "cli",
+    "mcp",
+    "agent"
+  ],
   "license": "MIT",
   "author": "Pooria Arab",
-  "repository": { "type": "git", "url": "https://github.com/pooriaarab/agentic-domain.git" },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pooriaarab/agentic-domain.git"
+  },
   "type": "module",
-  "engines": { "node": ">=18" },
-  "files": ["dist"],
-  "publishConfig": { "access": "public" },
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "mcpName": "io.github.pooriaarab/agentic-domain",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
-  "bin": { "agentic-domain": "./dist/cli.js", "agentic-domain-mcp": "./dist/mcp-bin.js" },
-  "scripts": { "build": "tsup", "typecheck": "tsc --noEmit", "test": "vitest run", "clean": "rm -rf dist" },
-  "dependencies": { "@modelcontextprotocol/sdk": "^1.12.0", "agentic-core": "^0.1.0", "zod": "^3.25.0" },
-  "devDependencies": { "@types/node": "^22.0.0", "tsup": "^8.0.0", "typescript": "^5.6.0", "vitest": "^3.0.0" }
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "agentic-domain": "./dist/cli.js",
+    "agentic-domain-mcp": "./dist/mcp-bin.js"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "agentic-core": "^0.1.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^3.0.0"
+  }
 }
