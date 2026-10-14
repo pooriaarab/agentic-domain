@@ -1,6 +1,6 @@
 {
   "name": "agentic-domain",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Preview domain names or attempt availability checks and purchases through Cloudflare Registrar with a Node.js library, CLI, and MCP server.",
   "keywords": [
     "cloudflare",
